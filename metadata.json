@@ -1,0 +1,6 @@
+{
+  "name": "AbilityBridge Academy",
+  "description": "A learning-first platform for disabled learners and center staff to learn practical marketing, unlock AI-powered helpers, create campaigner kits, and track inquiries into real skill evidence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
