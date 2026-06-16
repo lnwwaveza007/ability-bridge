@@ -55,6 +55,7 @@ import InquiryTracker from "./components/InquiryTracker";
 import TaskBreakdown from "./components/TaskBreakdown";
 import SkillPassportView from "./components/SkillPassportView";
 import PriceCalculator from "./components/PriceCalculator";
+import OnboardingGuide from "./components/OnboardingGuide";
 
 type CurrentSection = 
   | "HOME" 
@@ -67,7 +68,9 @@ type CurrentSection =
   | "PASSPORTS" 
   | "REPORTS" 
   | "PUBLIC_SHARE"
-  | "PRICE_CALCULATOR";
+  | "PRICE_CALCULATOR"
+  | "ONBOARDING_WORKER"
+  | "ONBOARDING_TEACHER";
 
 export default function App() {
   // --- 1. GLOBAL STATE INITIALIZATION ---
@@ -122,6 +125,35 @@ export default function App() {
   // Navigation references
   const [navigatedInquiry, setNavigatedInquiry] = useState<Inquiry | null>(null);
   const [selectedPublicOfferingId, setSelectedPublicOfferingId] = useState<string>("off-cafe-experience");
+
+  useEffect(() => {
+    const openOnboardingRoute = () => {
+      const hashRoute = window.location.hash.toLowerCase();
+      const pathRoute = window.location.pathname.toLowerCase();
+
+      if (hashRoute === "#/onboarding/worker" || pathRoute === "/onboarding/worker") {
+        setActiveRole("LEARNER");
+        setCurrentSection("ONBOARDING_WORKER");
+        setSelectedLessonIndex(null);
+        return;
+      }
+
+      if (hashRoute === "#/onboarding/teacher" || pathRoute === "/onboarding/teacher") {
+        setActiveRole("STAFF");
+        setCurrentSection("ONBOARDING_TEACHER");
+        setSelectedLessonIndex(null);
+      }
+    };
+
+    openOnboardingRoute();
+    window.addEventListener("hashchange", openOnboardingRoute);
+    window.addEventListener("popstate", openOnboardingRoute);
+
+    return () => {
+      window.removeEventListener("hashchange", openOnboardingRoute);
+      window.removeEventListener("popstate", openOnboardingRoute);
+    };
+  }, []);
 
   // --- 2. ACCESSIBILITY SPEECH FEEDBACK ---
   const triggerAnnouncement = (text: string) => {
@@ -735,6 +767,23 @@ export default function App() {
           {/* MAIN CHASSIS INNER RENDER VIEWPORT */}
           <main className="flex-1 p-6 md:p-8 max-w-7xl mx-auto overflow-y-auto">
             
+            {/* ========================================================
+                ONBOARDING GUIDES
+                ======================================================== */}
+            {currentSection === "ONBOARDING_WORKER" && (
+              <OnboardingGuide
+                audience="WORKER"
+                highContrast={settings.highContrast}
+              />
+            )}
+
+            {currentSection === "ONBOARDING_TEACHER" && (
+              <OnboardingGuide
+                audience="TEACHER"
+                highContrast={settings.highContrast}
+              />
+            )}
+
             {/* ========================================================
                 HOME LANDING SCREEN 
                 ======================================================== */}
