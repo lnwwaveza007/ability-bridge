@@ -294,9 +294,6 @@ export const COURSE_MODULES: CourseModule[] = [
       example: "Customer Nid wants to buy 10 packages next Monday. We write down: Customer name Nid, 10 packages, Monday. We check this list daily!",
       audioScript: "Easy Lesson 7: Let's log our inquiries! When a customer calls, save their name, what they want, and when they need it. This makes sure we never forget an order."
     },
-    toolUnlockedId: "inquiry_tracker",
-    toolUnlockedName: "Customer Inquiry Tracker",
-    toolUnlockedDesc: "Review, log, and filter customer requests from FB, LINE, and Phone in one digital board, and directly confirm entries into production orders.",
     activity: {
       question: "Why should we log inquiries immediately rather than relying on memory or chat history?",
       questionTh: "เหตุใดเราจึงควรบันทึกข้อมูลลูกค้าที่สนใจผ่านหน้าต่างจดบันทึกของระบบ แทนการพึ่งพาความจำและความคุ้นเคย?",
@@ -334,9 +331,6 @@ export const COURSE_MODULES: CourseModule[] = [
       example: "If a group wants to visit the cafe, Lek prepares chairs, Nid blends juice, and Suda sweeps the floor. Everyone does a proud job!",
       audioScript: "Easy Lesson 8: Let's break big jobs into small tasks! One friend cleans tables, one friend serves coffee, one friend puts on nice labels. Teamwork makes us proud of the results!"
     },
-    toolUnlockedId: "task_breakdown",
-    toolUnlockedName: "Task Breakdown Tool",
-    toolUnlockedDesc: "Assign specific sub-tasks to learners based on complexity, support guidelines, and track real-time workshop progress.",
     activity: {
       question: "How do we break down a 10-person cafe package reservation into practical training tasks?",
       questionTh: "การแบ่งงานสำหรับกลุ่มเข้าเยี่ยมชมคาเฟ่ 10 คน ออกเป็นงานฝึกทักษะคือข้อใด?",

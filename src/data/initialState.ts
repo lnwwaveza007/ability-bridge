@@ -5,6 +5,8 @@
 
 import { Offering, Inquiry, Task, LearnerProfile, Tool, CampaignKit } from "../types";
 
+export const MANAGEMENT_TOOL_IDS = ["inquiry_tracker", "task_breakdown"];
+
 export const INITIAL_LEARNERS: LearnerProfile[] = [
   {
     id: "learner-suda",
@@ -56,8 +58,6 @@ export const INITIAL_LEARNERS: LearnerProfile[] = [
       "qr_story",
       "campaign_kit",
       "shot_list",
-      "inquiry_tracker",
-      "task_breakdown",
       "skill_passport",
       "ai_helper"
     ]

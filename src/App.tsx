@@ -39,6 +39,7 @@ import {
   INITIAL_INQUIRIES, 
   INITIAL_TASKS,
   ALL_TOOLS,
+  MANAGEMENT_TOOL_IDS,
   PREPARED_CAMPAIGN_KITS 
 } from "./data/initialState";
 
@@ -163,8 +164,14 @@ export default function App() {
 
   // Get current active learner state object
   const currentLearner = learners.find(l => l.id === selectedLearnerId) || learners[0];
+  const isManagementTool = (toolId: string) => MANAGEMENT_TOOL_IDS.includes(toolId);
+  const learnerUnlockedTools = currentLearner.unlockedTools.filter(toolId => !isManagementTool(toolId));
+  const learnersWithoutManagementTools = learners.map(learner => ({
+    ...learner,
+    unlockedTools: learner.unlockedTools.filter(toolId => !isManagementTool(toolId))
+  }));
   const teacherUnlockedTools = ALL_TOOLS.map(tool => tool.id);
-  const activeUnlockedTools = activeRole === "STAFF" ? teacherUnlockedTools : currentLearner.unlockedTools;
+  const activeUnlockedTools = activeRole === "STAFF" ? teacherUnlockedTools : learnerUnlockedTools;
 
   // --- 3. MUTATOR OPERATIONS ---
   const completeModuleIndex = (index: number) => {
@@ -177,7 +184,7 @@ export default function App() {
         
         // Check unlock associated tools
         const updatedTools = [...l.unlockedTools];
-        const associatedTools = ALL_TOOLS.filter(t => t.requiredModuleIndex === index);
+        const associatedTools = ALL_TOOLS.filter(t => t.requiredModuleIndex === index && !isManagementTool(t.id));
         associatedTools.forEach((tool) => {
           if (!updatedTools.includes(tool.id)) {
             updatedTools.push(tool.id);
@@ -456,10 +463,14 @@ export default function App() {
                     </span>
                   </button>
 
+                  <div className="pt-2 border-t border-slate-800">
+                    <span className="block text-[9px] uppercase font-black text-slate-500 mb-1.5 tracking-widest">Tools</span>
+                  </div>
+
                   {/* Skill Passport */}
                   <button
                     onClick={() => {
-                      if (currentLearner.unlockedTools.includes("skill_passport")) {
+                      if (learnerUnlockedTools.includes("skill_passport")) {
                         setCurrentSection("PASSPORTS");
                       } else {
                         triggerAnnouncement("Skill Passport unlocks after Module 9.");
@@ -468,13 +479,13 @@ export default function App() {
                     className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center justify-between gap-1 cursor-pointer ${
                       currentSection === "PASSPORTS" 
                         ? "bg-indigo-600 text-white font-bold" 
-                        : currentLearner.unlockedTools.includes("skill_passport")
+                        : learnerUnlockedTools.includes("skill_passport")
                           ? "hover:bg-slate-800 text-slate-400 hover:text-white"
                           : "bg-slate-800/40 text-slate-500"
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      {currentLearner.unlockedTools.includes("skill_passport") ? <Award size={14} /> : <Lock size={14} />}
+                      {learnerUnlockedTools.includes("skill_passport") ? <Award size={14} /> : <Lock size={14} />}
                       <span>My Passports Portfolio</span>
                     </div>
                     <span className="text-[10px] bg-indigo-500/25 px-1.5 py-0.5 rounded text-indigo-300 font-black font-sans">⭐</span>
@@ -484,7 +495,7 @@ export default function App() {
                   <button
                     id="nav-price-calc-learner"
                     onClick={() => {
-                      if (currentLearner.unlockedTools.includes("price_calculator")) {
+                      if (learnerUnlockedTools.includes("price_calculator")) {
                         setCurrentSection("PRICE_CALCULATOR");
                       } else {
                         triggerAnnouncement("Worth and Price Calculator unlocks after Module 1.");
@@ -493,25 +504,20 @@ export default function App() {
                     className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center justify-between gap-1 cursor-pointer ${
                       currentSection === "PRICE_CALCULATOR" 
                         ? "bg-indigo-600 text-white font-bold" 
-                        : currentLearner.unlockedTools.includes("price_calculator")
+                        : learnerUnlockedTools.includes("price_calculator")
                           ? "hover:bg-slate-800 text-slate-400 hover:text-white"
                           : "bg-slate-800/40 text-slate-500"
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      {currentLearner.unlockedTools.includes("price_calculator") ? <Calculator size={14} /> : <Lock size={14} />}
+                      {learnerUnlockedTools.includes("price_calculator") ? <Calculator size={14} /> : <Lock size={14} />}
                       <span>Worth & Price Calculator</span>
                     </div>
                     <span className="text-[10.5px] bg-indigo-500/25 px-1.5 py-0.5 rounded text-indigo-300">฿</span>
                   </button>
-
-                  <div className="pt-2 border-t border-slate-800">
-                    <span className="block text-[9px] uppercase font-black text-slate-500 mb-1.5 tracking-widest">Earned Tools</span>
-                  </div>
-
                   <button
                     onClick={() => {
-                      if (currentLearner.unlockedTools.includes("campaign_kit")) {
+                      if (learnerUnlockedTools.includes("campaign_kit")) {
                         setCurrentSection("AI_GENERATOR");
                       } else {
                         triggerAnnouncement("AI Campaign Kit unlocks after Module 5.");
@@ -520,76 +526,22 @@ export default function App() {
                     className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center justify-between gap-1 cursor-pointer ${
                       currentSection === "AI_GENERATOR"
                         ? "bg-gradient-to-r from-purple-650 to-indigo-600 text-white font-bold ring-1 ring-purple-400 shadow-md shadow-purple-900/40"
-                        : currentLearner.unlockedTools.includes("campaign_kit")
+                        : learnerUnlockedTools.includes("campaign_kit")
                           ? "hover:bg-slate-800 text-slate-400 hover:text-white"
                           : "bg-slate-800/40 text-slate-500"
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      {currentLearner.unlockedTools.includes("campaign_kit") ? <Sparkles size={14} className="text-purple-400" /> : <Lock size={14} />}
+                      {learnerUnlockedTools.includes("campaign_kit") ? <Sparkles size={14} className="text-purple-400" /> : <Lock size={14} />}
                       <span>AI Campaign Kit</span>
                     </div>
                     <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                      currentLearner.unlockedTools.includes("campaign_kit") ? "bg-emerald-500/25 text-emerald-300" : "bg-red-500/25 text-red-300"
+                      learnerUnlockedTools.includes("campaign_kit") ? "bg-emerald-500/25 text-emerald-300" : "bg-red-500/25 text-red-300"
                     }`}>
-                      {currentLearner.unlockedTools.includes("campaign_kit") ? "Open" : "Module 5"}
+                      {learnerUnlockedTools.includes("campaign_kit") ? "Open" : "Module 5"}
                     </span>
                   </button>
 
-                  <button
-                    onClick={() => {
-                      if (currentLearner.unlockedTools.includes("inquiry_tracker")) {
-                        setCurrentSection("INQUIRIES");
-                      } else {
-                        triggerAnnouncement("Inquiry Tracker unlocks after Module 7.");
-                      }
-                    }}
-                    className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center justify-between gap-1 cursor-pointer ${
-                      currentSection === "INQUIRIES"
-                        ? "bg-indigo-600 text-white font-bold"
-                        : currentLearner.unlockedTools.includes("inquiry_tracker")
-                          ? "hover:bg-slate-800 text-slate-400 hover:text-white"
-                          : "bg-slate-800/40 text-slate-500"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      {currentLearner.unlockedTools.includes("inquiry_tracker") ? <Layers size={14} /> : <Lock size={14} />}
-                      <span>Inquiry Practice Board</span>
-                    </div>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                      currentLearner.unlockedTools.includes("inquiry_tracker") ? "bg-emerald-500/25 text-emerald-300" : "bg-red-500/25 text-red-300"
-                    }`}>
-                      {currentLearner.unlockedTools.includes("inquiry_tracker") ? "Open" : "Module 7"}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      if (currentLearner.unlockedTools.includes("task_breakdown")) {
-                        setNavigatedInquiry(null);
-                        setCurrentSection("TASKS");
-                      } else {
-                        triggerAnnouncement("Task Breakdown unlocks after Module 8.");
-                      }
-                    }}
-                    className={`w-full text-left p-2.5 rounded-xl transition-all flex items-center justify-between gap-1 cursor-pointer ${
-                      currentSection === "TASKS"
-                        ? "bg-indigo-600 text-white font-bold"
-                        : currentLearner.unlockedTools.includes("task_breakdown")
-                          ? "hover:bg-slate-800 text-slate-400 hover:text-white"
-                          : "bg-slate-800/40 text-slate-500"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      {currentLearner.unlockedTools.includes("task_breakdown") ? <ClipboardList size={14} /> : <Lock size={14} />}
-                      <span>Real Task Breakdown</span>
-                    </div>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                      currentLearner.unlockedTools.includes("task_breakdown") ? "bg-emerald-500/25 text-emerald-300" : "bg-red-500/25 text-red-300"
-                    }`}>
-                      {currentLearner.unlockedTools.includes("task_breakdown") ? "Open" : "Module 8"}
-                    </span>
-                  </button>
                 </>
               )}
 
@@ -798,18 +750,14 @@ export default function App() {
                   setCurrentSection("OFFERINGS");
                 }}
                 onStartTask={() => {
-                  setActiveRole("LEARNER");
-                  if (currentLearner.unlockedTools.includes("task_breakdown")) {
-                    setNavigatedInquiry(null);
-                    setCurrentSection("TASKS");
-                  } else {
-                    setCurrentSection("CLASSROOM");
-                    triggerAnnouncement("Real Task Breakdown unlocks after Module 8.");
-                  }
+                  setActiveRole("STAFF");
+                  setNavigatedInquiry(null);
+                  setCurrentSection("TASKS");
+                  triggerAnnouncement("Task breakdown is available in the teacher workspace.");
                 }}
                 onShowPassport={() => {
                   setActiveRole("LEARNER");
-                  if (currentLearner.unlockedTools.includes("skill_passport")) {
+                  if (learnerUnlockedTools.includes("skill_passport")) {
                     setCurrentSection("PASSPORTS");
                   } else {
                     setCurrentSection("CLASSROOM");
@@ -826,7 +774,7 @@ export default function App() {
             {currentSection === "CLASSROOM" && selectedLessonIndex === null && (
               <LearningDashboard
                 completedModules={currentLearner.completedModules}
-                unlockedTools={currentLearner.unlockedTools}
+                unlockedTools={learnerUnlockedTools}
                 onStartModule={(idx) => setSelectedLessonIndex(idx)}
                 onOverrideUnlock={handleOverrideUnlock}
                 onOverrideLock={handleOverrideLock}
@@ -852,7 +800,7 @@ export default function App() {
             {/* ========================================================
                 OFFERINGS MANAGEMENT CATALOG SCREEN
                 ======================================================== */}
-            {currentSection === "OFFERINGS" && (
+            {currentSection === "OFFERINGS" && activeRole === "STAFF" && (
               <OfferingManager
                 offerings={offerings}
                 onAddOffering={handleAddOffering}
@@ -885,7 +833,7 @@ export default function App() {
             {/* ========================================================
                 CAMPAIGN KITS LIBRARY LIST
                 ======================================================== */}
-            {currentSection === "CAMPAIGN_DECK" && (
+            {currentSection === "CAMPAIGN_DECK" && activeRole === "STAFF" && (
               <CampaignKitManager
                 campaignKits={campaignKits}
                 offerings={offerings}
@@ -916,7 +864,7 @@ export default function App() {
             {/* ========================================================
                 INQUIRY TRACER DESK SCREEN
                 ======================================================== */}
-            {currentSection === "INQUIRIES" && (
+            {currentSection === "INQUIRIES" && activeRole === "STAFF" && (
               <InquiryTracker
                 inquiries={inquiries}
                 offerings={offerings}
@@ -934,12 +882,12 @@ export default function App() {
             {/* ========================================================
                 TASKS BREAKDOWN ASSIGNER SCREEN
                 ======================================================== */}
-            {currentSection === "TASKS" && (
+            {currentSection === "TASKS" && activeRole === "STAFF" && (
               <TaskBreakdown
                 tasks={tasks}
                 inquiries={inquiries}
                 offerings={offerings}
-                learners={learners}
+                learners={learnersWithoutManagementTools}
                 selectedInquiryFromNav={navigatedInquiry}
                 onAddTask={handleAddTask}
                 onUpdateTaskStatus={handleUpdateTaskStatus}
@@ -976,7 +924,7 @@ export default function App() {
             {/* ========================================================
                 BUSINESS REPORTS / CENTER DASHBOARD SCREEN
                 ======================================================== */}
-            {currentSection === "REPORTS" && (
+            {currentSection === "REPORTS" && activeRole === "STAFF" && (
               <div className={`space-y-6 ${settings.highContrast ? "text-white" : "text-slate-800"}`}>
                 <div>
                   <h2 className="text-xl md:text-2xl font-black text-slate-950">Center Business Impact Reports</h2>

@@ -11,7 +11,7 @@
 import React, { useState } from "react";
 import { BookOpen, Lock, Unlock, Play, Sparkles, Award, FastForward, CheckCircle, Volume2, Calendar, Smile, Star, Check, ChevronRight } from "lucide-react";
 import { COURSE_MODULES, CourseModule } from "../data/courses";
-import { ALL_TOOLS } from "../data/initialState";
+import { ALL_TOOLS, MANAGEMENT_TOOL_IDS } from "../data/initialState";
 import { AccessibilitySettings } from "../types";
 
 interface LearningDashboardProps {
@@ -188,6 +188,8 @@ export default function LearningDashboard({
 
   // Total progress
   const currentProgressPercent = Math.round((completedModules.length / COURSE_MODULES.length) * 100);
+  const learnerTools = ALL_TOOLS.filter(tool => !MANAGEMENT_TOOL_IDS.includes(tool.id));
+  const learnerUnlockedTools = unlockedTools.filter(toolId => !MANAGEMENT_TOOL_IDS.includes(toolId));
   const isSudaProgressDemo = activeLearnerName.toLowerCase().includes("suda");
 
   // Quick read out of current progress
@@ -252,7 +254,7 @@ export default function LearningDashboard({
                 {completedModules.length} / {COURSE_MODULES.length} Lessons Finished
               </span>
               <span className="block text-[10px] text-indigo-305">
-                Unlocked Tools: {unlockedTools.length} / {ALL_TOOLS.length}
+                Unlocked Tools: {learnerUnlockedTools.length} / {learnerTools.length}
               </span>
             </div>
           </div>
@@ -618,7 +620,7 @@ export default function LearningDashboard({
             </div>
 
             <div className="space-y-3.5">
-              {ALL_TOOLS.map((tool) => {
+              {learnerTools.map((tool) => {
                 const worksUnlocked = unlockedTools.includes(tool.id);
                 
                 return (

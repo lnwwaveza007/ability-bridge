@@ -32,12 +32,12 @@ const workerSteps = [
   },
   {
     title: "Unlock support tools",
-    body: "Finish lessons to unlock helpers like price calculator, customer persona, campaign kit, inquiry tracker, and task breakdown.",
+    body: "Finish lessons to unlock helpers like price calculator, customer persona, campaign kit, skill passport, and AI prompt support.",
     icon: Sparkles
   },
   {
     title: "Practice with real work",
-    body: "Use confirmed cafe, product, or event requests as small tasks. Each task has clear difficulty, support level, and visual instructions.",
+    body: "Teachers assign confirmed cafe, product, or event requests as small tasks. Each task has clear difficulty, support level, and visual instructions.",
     icon: BriefcaseBusiness
   },
   {

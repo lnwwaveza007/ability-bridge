@@ -42,9 +42,9 @@ export default function LandingScreen({
       style: "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
     },
     {
-      title: "Do a real task",
-      subtitle: "Practice with work cards from customer orders, cafe service, or product prep.",
-      note: "Best when you are ready to turn learning into work evidence.",
+      title: "Review work tasks",
+      subtitle: "Teacher-only board for customer orders, cafe service, and product prep.",
+      note: "Use this to assign real work and approve evidence.",
       icon: BriefcaseBusiness,
       button: "Open tasks",
       onClick: onStartTask,
