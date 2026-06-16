@@ -47,8 +47,20 @@ export const INITIAL_LEARNERS: LearnerProfile[] = [
     suitableTasks: ["Timber Cutting", "Coarse Sanding", "Stock Counting", "Chair Arranging"],
     supportNeeds: "Uses tactile guidelines and noise-reduction headphones on loud machines.",
     preferredEnvironment: "Woodworking workshop with designated physical safety tracks.",
-    completedModules: [0], // Completed Module 1
-    unlockedTools: []
+    completedModules: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // Completed all modules
+    unlockedTools: [
+      "marketing_helper",
+      "price_calculator",
+      "customer_persona",
+      "value_builder",
+      "qr_story",
+      "campaign_kit",
+      "shot_list",
+      "inquiry_tracker",
+      "task_breakdown",
+      "skill_passport",
+      "ai_helper"
+    ]
   }
 ];
 
